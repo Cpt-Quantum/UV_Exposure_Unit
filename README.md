@@ -1,7 +1,7 @@
 # UV_Exposure_Unit
 A directory for my UV exposure unit with code for a PIC16F877A, and schematics.
 
-Due to the nature of the electronic arrangement for this project a picture will be provided of the finished project to show how it is all assembled. The boards are all quite small and were designed to be modular, none of which are particularly complicated individually. The reason I went for an active control system for this project was so that it was self timing and then would shut off. So that it does not need to be managed, as the circuit board being exposed can be quite sensitive as to how much UV exposure it recieves.
+Due to the nature of the electronic arrangement for this project a picture will be provided of the finished project to show how it is all assembled. The boards are all quite small and were designed to be modular, none of which are particularly complicated individually. The reason I went for an active control system for this project was so that it was self timing and then would shut off, so that it does not need to be managed, as the circuit board being exposed can be quite sensitive as to how much UV exposure it recieves.
 
 A quick note: The software isn't completed yet as there is a problem with pin RB5 not coming under software control. This will require delving into the datasheet some more as I haven't been able to find the root cause of the issue. This means that the LCD part of the code is not yet functioning as RB5 is connected to the register select pin on the LCD. The debounce code also needs to be tidied away into its own header file with associated functions.
 
