@@ -10,15 +10,15 @@
 #include "LCD.h"
 
 //Define constants to choose which pins to use for each signal on the LCD
-#define RS RB5    //Register select pin
-#define EN RB4    //Enable pin
-#define D4 RB0    
-#define D5 RB1
-#define D6 RB2
-#define D7 RB3
+#define D4 LATBbits.LATB5    
+#define D5 LATBbits.LATB4
+#define D6 LATBbits.LATB3
+#define D7 LATBbits.LATB2
+#define RS LATBbits.LATB1    //Register select pin
+#define EN LATBbits.LATB0    //Enable pin
 
 //Define oscillator frequency for delay function use
-#define _XTAL_FREQ 4000000
+#define _XTAL_FREQ 1000000
 
 //Define required delay times for data to be read from pins DB7-DB4
 #define min_delay 5 //ms
@@ -192,5 +192,3 @@ void LCD_Initialise(uint8_t num_display_lines, uint8_t font_type,
     LCD_Cmd(display_control);
     __delay_ms(20);
 }
-
-
