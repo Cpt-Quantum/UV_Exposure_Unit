@@ -10,12 +10,6 @@
 
 #include <stdint.h>
 
-//#ifdef	__cplusplus
-//extern "C" {
-//#endif
-
-
-
 //Function to set bits on each data pin
 void LCD_Port(char a);
 

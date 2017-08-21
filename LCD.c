@@ -192,3 +192,5 @@ void LCD_Initialise(uint8_t num_display_lines, uint8_t font_type,
     LCD_Cmd(display_control);
     __delay_ms(20);
 }
+
+
