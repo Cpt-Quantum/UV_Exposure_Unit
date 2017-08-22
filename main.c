@@ -1,4 +1,4 @@
-/*
+ /*
  * File:   main.C
  * Author: Connor
  *
@@ -94,8 +94,6 @@
 #define TOP_STATE           LATAbits.LATA7
 #define BOTTOM_STATE        LATAbits.LATA6
 
-
-
 void main(void) {
     //Turn off comparitors
     CM1CON0 = 0x07;
@@ -106,75 +104,82 @@ void main(void) {
     ANSELC = 0x00;
     ANSELD = 0x00;
     ANSELE = 0x00;
-   
+
     //Initialise the ports as needed
     debounce_initialise();
     TRISB = 0x00;
-  
+
     //Initialise LCD
-    LCD_Initialise(1,0,0,0);
-    
+    LCD_Initialise(1, 0, 0, 0);
+
     //Move to start position on the LCD
-    LCD_Cursor_Position(1,1);    
-    
+    LCD_Cursor_Position(1, 1);
+
     //Start while loop to keep the program looping forever    
-    while(1){
-    
-        
-    //Initialise states for the LED panels
-    TOP_STATE = 0;
-    BOTTOM_STATE = 0;
-    
-    //Button read state:
-    //This is the initial state, the PIC waits for the user to push the ON_BTN
-    // to put the PIC into the on state. This is also the state to set the timer
-    // and which LED panels (top or bottom) to turn on.
-    while (ON_State() == 0) {
-        
-        //Write "Select states" to LCD
-        LCD_Cursor_Position(1,1);
-        LCD_Write_String("Select states",13);
-        
-        
-        //Read the buttons and set the states accordingly
-        debounce_ON_BTN();
-        debounce_TOP_BTN();
-        debounce_BOTTOM_BTN();
-        debounce_TMR_SET_BTN();
-        
-        //If the timer set button has been activated, read the button states for
-        // the up/down user inputs and wait until user presses the timer set 
-        //button again.
-        while (TMR_SET_State() == 1){
-            //Set timer with buttons
-            debounce_TMR_DOWN_BTN();
-            debounce_TMR_UP_BTN();
-            debounce_TMR_SET_BTN();
-            //Write current set time to LCD
-            LCD_Cursor_Position(1,1);
+    while (1) {
+
+
+        //Initialise states for the LED panels
+        TOP_STATE = 0;
+        BOTTOM_STATE = 0;
+
+        //Button read state:
+        //This is the initial state, the PIC waits for the user to push the ON_BTN
+        // to put the PIC into the on state. This is also the state to set the timer
+        // and which LED panels (top or bottom) to turn on.
+        while (ON_State() == 0) {
+
+            //Write "Select states" to LCD
+            LCD_Cursor_Position(1, 1);
+            LCD_Write_String("Select states", 13);
             
+            //Use an internal for loop to reduce the effect of the LCD functions'
+            // wait times on the debounce functionality.
+            for (int i = 0; i < 100; i++) {
+                //Read the buttons and set the states accordingly
+                debounce_ON_BTN();
+                debounce_TOP_BTN();
+                debounce_BOTTOM_BTN();
+                debounce_TMR_SET_BTN();
+
+                //If the timer set button has been activated, read the button states for
+                // the up/down user inputs and wait until user presses the timer set 
+                //button again.
+                while (TMR_SET_State() == 1) {
+                    //Set timer with buttons
+                    debounce_TMR_DOWN_BTN();
+                    debounce_TMR_UP_BTN();
+                    debounce_TMR_SET_BTN();
+                    //Write current set time to LCD
+                    LCD_Cursor_Position(1, 1);
+
+                }
+                __delay_ms(1);
+
+            }
+        }//End of button read state
+
+
+        //On state:
+        //This is the state where the PIC switches on the LED panels and counts up
+        // to the set timer amount and then switches off the panels. It then goes
+        //back in to the button read state. The system can also exit this state if
+        // the user presses the on/off button
+
+        //Switch on the MOSFETs according to the user set state (held in the LED 
+        //states)
+        TOP_STATE = TOP_State();
+        BOTTOM_STATE = BOTTOM_State();
+        
+        LCD_Cursor_Position(1,1);
+        LCD_Write_String("On state", 13);
+        
+        //Begin counter
+        for (int i = 0; (i < (1000 * On_Time())); i++) {
+            debounce_ON_BTN();
+            if (ON_State() == 0) break;
+            __delay_ms(1);
         }
-        __delay_ms(1);
-    }
-    
-    
-    //On state:
-    //This is the state where the PIC switches on the LED panels and counts up
-    // to the set timer amount and then switches off the panels. It then goes
-    //back in to the button read state. The system can also exit this state if
-    // the user presses the on/off button
-    
-    //Switch on the MOSFETs according to the user set state (held in the LED 
-    //states)
-    TOP_STATE=TOP_State();
-    BOTTOM_STATE=BOTTOM_State();
-    
-    //Begin counter
-    for(int i=0; (i<(1000*On_Time())); i++){
-        debounce_ON_BTN();
-        if (ON_State() == 0) break;
-        __delay_ms(1);
-    }
-    
+
     }//End program while loop
-}
+}//End of main
