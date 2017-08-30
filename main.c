@@ -6,12 +6,12 @@
  */
 
 /*************************************************/
+/* PIC18F45K50 Configuration Bit Settings */
 
 // 'C' source line config statements
 
 #include <xc.h>
 
-/* PIC18F45K50 Configuration Bit Settings */
 // #pragma config statements should precede project file includes.
 // Use project enums instead of #define for ON and OFF.
 
@@ -86,7 +86,6 @@
 #include <stdint.h>
 #include "debounce.h"
 #include "LCD.h"
-#include "general.h"
 
 //Define oscillator frequency for delay function use
 #define _XTAL_FREQ 1000000
@@ -94,9 +93,6 @@
 //Define the pins for the MOSFET switches
 #define TOP_STATE           LATAbits.LATA7
 #define BOTTOM_STATE        LATAbits.LATA6
-
-//Global variable to save the set on_time between runs
-uint8_t g_on_time = 30;
 
 void main(void) {
     //Turn off comparitors
@@ -121,10 +117,7 @@ void main(void) {
 
     //Start while loop to keep the program looping forever    
     while (1) {
-        
-        Reset_States();
-        LCD_Clear();
-        Set_On_Time(g_on_time);
+
 
         //Initialise states for the LED panels
         TOP_STATE = 0;
@@ -135,18 +128,10 @@ void main(void) {
         // to put the PIC into the on state. This is also the state to set the timer
         // and which LED panels (top or bottom) to turn on.
         while (ON_State() == 0) {
+
             //Write "Select states" to LCD
             LCD_Cursor_Position(1, 1);
             LCD_Write_String("Select states", 13);
-            //Display current set time on LCD
-            LCD_Cursor_Position(1,2);
-            LCD_Write_String("Timer:",6);
-            //Now display current time that the system is set to run
-            LCD_Cursor_Position(7,2);
-            char ctime[] = "00m00s";
-            LCD_Write_String(time(ctime,On_Time()),6);
-            //Clear last 4 characters on the second row
-            LCD_Write_String("    ",4);
             
             //Use an internal for loop to reduce the effect of the LCD functions'
             // wait times on the debounce functionality.
@@ -161,61 +146,39 @@ void main(void) {
                 // the up/down user inputs and wait until user presses the timer set 
                 //button again.
                 while (TMR_SET_State() == 1) {
-                    //Prompt user to set time on the LCD and display current time that 
-                    // the LED panels are set to be on for.
-                    LCD_Cursor_Position(1,2);
-                    LCD_Write_String("Set timer:", 10);
-                    LCD_Write_String(time(ctime,On_Time()),6);
-                    
-                    //For loop to reduce effect of LCD functions on debouncing
-                    for(int i = 0; i<100; i++){
-                        //Set timer with buttons
-                        debounce_TMR_DOWN_BTN();
-                        debounce_TMR_UP_BTN();
-                        debounce_TMR_SET_BTN();
-                    }
+                    //Set timer with buttons
+                    debounce_TMR_DOWN_BTN();
+                    debounce_TMR_UP_BTN();
+                    debounce_TMR_SET_BTN();
+                    //Write current set time to LCD
+                    LCD_Cursor_Position(1, 1);
+
                 }
                 __delay_ms(1);
+
             }
         }//End of button read state
-        
+
 
         //On state:
         //This is the state where the PIC switches on the LED panels and counts up
         // to the set timer amount and then switches off the panels. It then goes
         //back in to the button read state. The system can also exit this state if
         // the user presses the on/off button
-        
-        //Firstly, store the current on_time so it is remembered after the timer 
-        // expires.
-        g_on_time = On_Time();
-        
+
         //Switch on the MOSFETs according to the user set state (held in the LED 
         //states)
         TOP_STATE = TOP_State();
         BOTTOM_STATE = BOTTOM_State();
         
-        LCD_Clear();
         LCD_Cursor_Position(1,1);
-        LCD_Write_String("LED panels on!",14);
-        LCD_Cursor_Position(1,2);
-        LCD_Write_String("Time left:", 10);
-        LCD_Cursor_Position(11,2);
-        char ctime[] = "00m00s";
-        LCD_Write_String(time(ctime,On_Time()),6);   
-                
+        LCD_Write_String("On state", 13);
+        
         //Begin counter
-        while (On_Time()>=1){
+        for (int i = 0; (i < (1000 * On_Time())); i++) {
+            debounce_ON_BTN();
             if (ON_State() == 0) break;
-            for(int i = 0; i<1000; i++){
-                debounce_ON_BTN();
-                __delay_ms(1);
-            }
-            if (ON_State() == 0) break;
-            Set_On_Time(On_Time()-1);
-            //Update time left on the LCD
-            LCD_Cursor_Position(11,2);
-            LCD_Write_String(time(ctime,On_Time()),6);     
+            __delay_ms(1);
         }
 
     }//End program while loop

@@ -28,37 +28,19 @@
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef debounce
-#define	debounce
+#ifndef button_debounce
+#define	button_debounce
 
-#include <stdint.h>
+#include <xc.h> // include processor files - each processor file is guarded.  
 
 //Prototype function declarations
 //Debounce and latching function for each button
-void debounce_ON_BTN();
-void debounce_TOP_BTN();
-void debounce_BOTTOM_BTN();
-void debounce_TMR_DOWN_BTN();
-void debounce_TMR_UP_BTN();
-void debounce_TMR_SET_BTN();
+void debounce1();
+void debounce2();
+void debounce3();
+void debounce4();
+void debounce5();
+void debounce6();
 
-//Initialisation function
-void debounce_initialise();
-
-//State accessing functions
-uint8_t ON_State();
-uint8_t TMR_SET_State();
-uint8_t TOP_State();
-uint8_t BOTTOM_State();
-
-//Function to reset all states
-void Reset_States();
-
-//Function to return set on_time
-uint8_t On_Time();
-
-//Function to set the on time
-void Set_On_Time(uint8_t set_on_time);
-
-#endif
+#endif	button_debounce
 
