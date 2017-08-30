@@ -1,4 +1,4 @@
-update=08-Apr-17 5:20:05 PM
+update=18/08/2017 11:14:02
 version=1
 last_client=kicad
 [pcbnew]
@@ -59,3 +59,4 @@ LibName27=atmel
 LibName28=contrib
 LibName29=valves
 LibName30=pic16f886
+LibName31=C:/Users/SAI-Connor/Documents/Dropbox/Electronics_and_code/Schematics/KiCad_Libraries/PIC

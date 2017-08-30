@@ -1,6 +1,7 @@
 EESchema-LIBRARY Version 2.3
 #encoding utf-8
 #
+
 # PIC16F886
 #
 DEF PIC16F886 IC 0 40 Y Y 1 F N
@@ -41,4 +42,5 @@ X VSS 19 900 -500 200 L 50 50 1 1 W
 ENDDRAW
 ENDDEF
 #
+
 #End Library
