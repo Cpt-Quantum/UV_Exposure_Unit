@@ -28,7 +28,7 @@
 
 
 //Variable to store the on time in seconds - default of 30 seconds
-uint16_t on_time = 30;
+unsigned long on_time = 30;
 
 //Debounce functions. Credit goes to Jack Ganssle for the original algorithm
 //This function is called on a regular interrupt inside the latching function
@@ -64,7 +64,7 @@ void debounce_TMR_DOWN_BTN(){
     static uint16_t State4;              //Current debounce status
     State4 = (State4<<1 | !TMR_DOWN_BTN_IN | 0xE000);
     if(State4 == 0xF000){
-        on_time = on_time - 1;
+        on_time = on_time - 10;
         State4 = 0x0000;
     }
 }
@@ -73,7 +73,7 @@ void debounce_TMR_UP_BTN(){
     static uint16_t State5;              //Current debounce status
     State5 = (State5<<1 | !TMR_UP_BTN_IN | 0xE000);
     if(State5 == 0xF000){
-        on_time = on_time + 1;
+        on_time = on_time + 10;
         State5 = 0x0000;
     }
 }
@@ -112,7 +112,7 @@ void Reset_States(){
 }
 
 //Function to return the set on_time
-uint8_t On_Time(){return on_time;}
+unsigned long On_Time(){return on_time;}
 
 //Function to set the on time
-void Set_On_Time(uint8_t set_on_time){on_time = set_on_time;}
+void Set_On_Time(unsigned long set_on_time){on_time = set_on_time;}

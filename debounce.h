@@ -55,10 +55,10 @@ uint8_t BOTTOM_State();
 void Reset_States();
 
 //Function to return set on_time
-uint8_t On_Time();
+unsigned long On_Time();
 
 //Function to set the on time
-void Set_On_Time(uint8_t set_on_time);
+void Set_On_Time(unsigned long set_on_time);
 
 #endif
 

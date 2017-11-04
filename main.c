@@ -96,7 +96,7 @@
 #define BOTTOM_STATE        LATAbits.LATA6
 
 //Global variable to save the set on_time between runs
-uint8_t g_on_time = 30;
+unsigned long g_on_time = 300;
 
 void main(void) {
     //Turn off comparitors
@@ -144,7 +144,7 @@ void main(void) {
             //Now display current time that the system is set to run
             LCD_Cursor_Position(7,2);
             char ctime[] = "00m00s";
-            LCD_Write_String(time(ctime,On_Time()),6);
+            LCD_Write_String(Time_mmss(ctime,On_Time()),6);
             //Clear last 4 characters on the second row
             LCD_Write_String("    ",4);
             
@@ -165,7 +165,7 @@ void main(void) {
                     // the LED panels are set to be on for.
                     LCD_Cursor_Position(1,2);
                     LCD_Write_String("Set timer:", 10);
-                    LCD_Write_String(time(ctime,On_Time()),6);
+                    LCD_Write_String(Time_mmss(ctime,On_Time()),6);
                     
                     //For loop to reduce effect of LCD functions on debouncing
                     for(int i = 0; i<100; i++){
@@ -202,7 +202,7 @@ void main(void) {
         LCD_Write_String("Time left:", 10);
         LCD_Cursor_Position(11,2);
         char ctime[] = "00m00s";
-        LCD_Write_String(time(ctime,On_Time()),6);   
+        LCD_Write_String(Time_mmss(ctime,On_Time()),6);
                 
         //Begin counter
         while (On_Time()>=1){
@@ -215,7 +215,7 @@ void main(void) {
             Set_On_Time(On_Time()-1);
             //Update time left on the LCD
             LCD_Cursor_Position(11,2);
-            LCD_Write_String(time(ctime,On_Time()),6);     
+            LCD_Write_String(Time_mmss(ctime,On_Time()),6);     
         }
 
     }//End program while loop

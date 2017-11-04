@@ -11,9 +11,10 @@
 #include "general.h"
 
 //Function to calculate number of tens for an integer input
-uint8_t tens (uint8_t number_in){
+uint8_t Tens (uint8_t number_in){
     //Buffer the input value
-    uint8_t number = number_in;
+    uint8_t number;
+    number = number_in;
     
     uint8_t tens = 0;
     
@@ -64,10 +65,10 @@ char tochar(uint8_t num) {
 }
 
 //Function to translate a time input in seconds (sss) to (mm/ss)
-char *time(char *char_time, uint8_t time){
+char *Time_mmss(char *char_time, unsigned long time){
 	uint8_t minutes = 0;
 	uint8_t seconds = 0;
-	uint8_t time_buffer = time;
+	unsigned long time_buffer = time;
     
     //Variable to hold the individual digits for mm/ss
     uint8_t tens_minutes = 0;
@@ -85,8 +86,8 @@ char *time(char *char_time, uint8_t time){
     seconds = time - minutes * 60;
     
     //Calculate the number of tens of minutes and seconds
-    tens_minutes = tens(minutes);
-    tens_seconds = tens(seconds);
+    tens_minutes = Tens(minutes);
+    tens_seconds = Tens(seconds);
     
     //Calculate the digits of minutes and seconds
     digits_minutes = minutes - 10 * tens_minutes;

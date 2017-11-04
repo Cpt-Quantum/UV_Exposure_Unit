@@ -35,13 +35,13 @@
 #include <stdint.h>
 
 //Function to calculate number of tens for an integer input
-uint8_t tens (uint8_t number_in);
+uint8_t Tens (uint8_t number_in);
 
 //Function to return the character corresponding to a digit between 0 and 9
 char tochar(uint8_t num);
 
 //Function to translate a time input in seconds (sss) to (mm/ss)
-char *time(char *char_time, uint8_t time);
+char *Time_mmss(char *char_time, unsigned long time);
 
 #endif	/* general header */
 
